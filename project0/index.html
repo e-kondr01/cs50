@@ -1,15 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <style>
+            .topText {
+                text-align: right;
+            }
+        </style>
         <title>Search</title>
     </head>
     <body>
-        <a href='images.html'>Images</a>
-        <a href='advanced.html'>Advanced search</a>
+        <div class='topText'>
+            <a href='images.html'>Images</a>
+            <a href='advanced.html'>Advanced search</a>
+        </div>
 
         <form action="https://google.com/search">
             <input type="text" name="q">
-            <input type="submit" value="Google Search">
+            <button type="submit">Google Search</button>
+            <button type="submit" name="btnI" value="1">I'm feeling lucky</button>
         </form>
     </body>
 </html>
