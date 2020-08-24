@@ -1,23 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <style>
-            .topText {
-                text-align: right;
-            }
-        </style>
+        <link rel="stylesheet" type="text/css" href="styles.css">
         <title>Search</title>
     </head>
     <body>
-        <div class='topText'>
+        <div class='top-link'>
             <a href='images.html'>Images</a>
             <a href='advanced.html'>Advanced search</a>
         </div>
 
+        <img class='google-logo' src='googlelogo.png'> 
+
         <form action="https://google.com/search">
-            <input type="text" name="q">
-            <button type="submit">Google Search</button>
-            <button type="submit" name="btnI" value="1">I'm feeling lucky</button>
+            <div>
+                <input class='search-field' type="text" name="q">
+            </div>
+            <div class='buttons'>
+                <button type="submit">Google Search</button>
+                <button type="submit" name="btnI" value="1">I'm feeling lucky</button>
+            </div>
         </form>
     </body>
 </html>

@@ -1,0 +1,60 @@
+.top-link {
+    text-align: right;
+    font-size: small;
+    margin: 20px;
+}
+
+a:link {
+    color: black;
+    text-decoration: none;
+}
+
+a:visited {
+    color: black;
+    text-decoration: none;
+}
+
+a:hover {
+    color: gray;
+    text-decoration: underline;
+}
+
+a + a {
+    margin-left: 12px;
+}
+
+html {
+    font-family: arial;
+}
+
+.google-logo {
+    display: block;
+    margin: 120px auto 50px;
+}
+
+.search-field {
+    border: 1px solid transparent;
+    border-radius: 15px;
+    display: block;
+    margin: 0 auto;
+    width: 580px;
+    height: 30px;
+    border-color: gray;
+    padding: 2px;
+}
+
+.search-field:hover {
+    box-shadow: 2px 2px 18px gray, -2px -2px 18px gray;
+}
+
+.search-field:focus {
+    border: 1px solid transparent;
+    border-radius: 15px;
+    display: block;
+    margin: 0 auto;
+    width: 580px;
+    height: 30px;
+    border-color: gray;
+    padding: 2px;
+    box-shadow: red;
+}
