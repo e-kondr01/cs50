@@ -1,3 +1,7 @@
+html {
+    font-family: arial;
+}
+
 .top-link {
     text-align: right;
     font-size: small;
@@ -23,38 +27,68 @@ a + a {
     margin-left: 12px;
 }
 
-html {
-    font-family: arial;
-}
-
 .google-logo {
     display: block;
-    margin: 120px auto 50px;
+    margin: 120px auto 30px;
 }
 
 .search-field {
-    border: 1px solid transparent;
-    border-radius: 15px;
+    outline: none;
+    border: 1px solid #d9d9d9;
+    border-radius: 20px;
     display: block;
     margin: 0 auto;
-    width: 580px;
-    height: 30px;
-    border-color: gray;
-    padding: 2px;
+    width: 500px;
+    height: 35px;
+    padding: 3px 40px 3px 40px;
+    font-size: 16px;
+    color: #333333;
+    background: url("magnifying-glass.png") no-repeat;
+    background-size: auto 38%;
+    background-position: 12px;
 }
 
 .search-field:hover {
-    box-shadow: 2px 2px 18px gray, -2px -2px 18px gray;
+    box-shadow: 2px 2px 6px #d9d9d9, -2px -2px 6px #d9d9d9;
+    border: 1px solid transparent;
 }
 
-.search-field:focus {
-    border: 1px solid transparent;
-    border-radius: 15px;
-    display: block;
-    margin: 0 auto;
-    width: 580px;
-    height: 30px;
-    border-color: gray;
-    padding: 2px;
-    box-shadow: red;
+.buttons {
+    margin: 25px;
+    display: flex;
+    justify-content: center;
+}
+
+.submit-buttons {
+    outline: none;
+    background-color: #f2f2f2;
+    border: 1px solid;
+    color: #666666;
+    font-size: 15px;
+    margin: 0px 5px 0px;
+    padding: 10px 12px 10px 12px;
+    border-color: white;
+    border-radius: 4px;
+}
+
+.submit-buttons:hover {
+    border: 1px solid;
+    border-color: #bfbfbf;
+    color: #262626;
+}
+
+.submit-buttons:active {
+    border: 1px solid;
+    border-color: #668cff;
+    color: #262626;
+}
+
+#top-link-and-logo {
+    background-color: #e6e6e6;
+    margin: 0px 0px 0px 0px;
+}
+
+.small-google-logo {
+    height: 50px;
+    width: auto;
 }

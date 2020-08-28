@@ -5,19 +5,27 @@
         <title>Advanced search</title>
     </head>
     <body>
-        <div class='top-link'>
+        <div class='top-link' id='top-link-and-logo'>
+            <img class='small-google-logo' src='googlelogo.png' alt="Google Logo"> 
             <a href='index.html'>Search</a>
         </div>
-        <h1>Advanced Search</h1>
-        <h4>Find pages with...</h4>
-        <form action="https://google.com/search">
-            <ul>
-                <li>all these words:</li> <input type="text" name="as_q">
-                <li>this exact word or phrase:</li> <input type="text" name="as_epq">
-                <li>any of these words:</li> <input type="text" name="as_oq">
-                <li>none of these words:</li> <input type="text" name="as_eq">
-            </ul>
-            <input type="submit" value="Advanced Search">
-        </form>
+
+        <div class='advanced-search-top'>
+            <h1>Advanced Search</h1>
+        </div>
+
+        <div class='advanced-search-parametres'>
+            <h4>Find pages with...</h4>
+            <form action="https://google.com/search">
+                <ul>
+                    <li>all these words:</li> <input type="text" name="as_q">
+                    <li>this exact word or phrase:</li> <input type="text" name="as_epq">
+                    <li>any of these words:</li> <input type="text" name="as_oq">
+                    <li>none of these words:</li> <input type="text" name="as_eq">
+                </ul>
+            
+                <button type="submit" class='advanced-search-button'>Google Search</button>
+            </form>
+        </div>
     </body>
 </html>
