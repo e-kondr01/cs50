@@ -1,5 +1,10 @@
 html {
     font-family: arial;
+    margin: 0px;
+}
+
+body {
+    margin: 0px;
 }
 
 .top-link {
@@ -83,12 +88,65 @@ a + a {
     color: #262626;
 }
 
-#top-link-and-logo {
-    background-color: #e6e6e6;
+.top-link-and-logo {
+    text-align: right;
+    font-size: small;
+    background-color: #f2f2f2;
     margin: 0px 0px 0px 0px;
 }
 
 .small-google-logo {
     height: 50px;
     width: auto;
+}
+
+#advanced-search-top {
+    margin: 0px;
+    padding: 28px 45px;
+    color: #ff1a1a;
+    font-size: 20px;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.content {
+    margin: 0px;
+    padding: 8px 45px;
+    color: #262626;
+}
+
+.small-title {
+    padding: 25px 0px 0px 0px;
+}
+
+.advanced-search-parametres {
+    font-size: 13px;
+    list-style-type: none;
+    margin: 0;
+    padding: 0 0;
+}
+
+.advanced-search-parametres li {
+    padding: 10px 0;
+}
+
+#advanced-search-button {
+    outline: none;
+    background-color: #3385ff   ;
+    border: 1px solid;
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    margin: 0px 5px 0px;
+    padding: 10px 14px;
+    border-color: #0066ff;
+    border-radius: 4px;
+}
+
+#advanced-search-button:hover {
+    border: 1px solid #0052cc;
+    box-shadow: inset 0px 0px 15px 2px #1a75ff;
+}
+
+#advanced-search-button:active {
+    border-color: #002966;
 }
