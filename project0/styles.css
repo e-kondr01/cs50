@@ -89,15 +89,22 @@ a + a {
 }
 
 .top-link-and-logo {
-    text-align: right;
-    font-size: small;
     background-color: #f2f2f2;
-    margin: 0px 0px 0px 0px;
+    margin: 0px 0px;
+    height: 55px;
 }
 
 .small-google-logo {
-    height: 50px;
+    height: 30px;
     width: auto;
+    margin: 15px 15px 0px;
+}
+
+#advanced-top-link {
+    font-size: small;
+    position: absolute;
+    right: 40px;
+    top: 20px;
 }
 
 #advanced-search-top {
@@ -126,9 +133,23 @@ a + a {
 }
 
 .advanced-search-parametres li {
-    padding: 10px 0;
+    padding: 15px 0px;
 }
 
+.advanced-search-parametres input {
+    font-size: 12px;
+    padding: 6px 9px;
+    outline: none;
+    position: absolute;
+    right: 530px;
+    width: 600px;
+    border: 1px solid #cccccc;
+    margin: -5px 0px;
+}
+
+.advanced-search-parametres input:focus {
+    border-color: #668cff;
+}
 #advanced-search-button {
     outline: none;
     background-color: #3385ff   ;
@@ -136,10 +157,12 @@ a + a {
     color: white;
     font-size: 11px;
     font-weight: bold;
-    margin: 0px 5px 0px;
+    margin: 15px 5px;
     padding: 10px 14px;
     border-color: #0066ff;
     border-radius: 4px;
+    position: absolute;
+    right: 525px;
 }
 
 #advanced-search-button:hover {
