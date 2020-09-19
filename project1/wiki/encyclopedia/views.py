@@ -54,3 +54,11 @@ def search(request):
             "q": q,
             'no_res': no_res,
         })
+
+
+def new_page(request):
+    pass
+
+
+def create_page(request):
+    pass
