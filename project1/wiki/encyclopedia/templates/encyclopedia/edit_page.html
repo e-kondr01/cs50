@@ -1,15 +1,12 @@
 {% extends "encyclopedia/layout.html" %}
 
 {% block title %}
-    New page
+    Edit page {{title}}
 {% endblock %}
 
 {% block body %}
-    {% if error %}
-        <h1>A page with such name already exists! </h1> 
-    {% endif %}
-    <h2> Create new page: </h2>
-    <form action="{% url 'create_page' %}" method="post">
+    <h2> Edit page {{title}}: </h2>
+    <form action="{% url 'save_edited' %}" method="post">
         {% csrf_token %}
         <label for="title">Title of the page:</label>
         <input type="text" id="title" name="title" value='{{title}}' required> <br>

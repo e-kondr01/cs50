@@ -1,6 +1,8 @@
 import markdown2
 
 from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from random import randint
 
 from . import util
@@ -57,8 +59,37 @@ def search(request):
 
 
 def new_page(request):
-    pass
+    return render(request, "encyclopedia/new_page.html", {
+        'title': '',
+        'body': '',
+        'error': False,
+    })
 
 
 def create_page(request):
-    pass
+    entries = util.list_entries()
+    title = request.POST.get('title')
+    body = request.POST.get('page_body')
+    if title in entries:
+        return render(request, 'encyclopedia/new_page.html', {
+            'title': title,
+            'body': body,
+            'error': True,
+        })
+    util.save_entry(title, body)
+    return HttpResponseRedirect(reverse('wiki_page', args=[title]))
+
+
+def edit_page(request, title):
+    body = util.get_entry(title)
+    return render(request, "encyclopedia/edit_page.html", {
+        'title': title,
+        'body': body,
+    })
+
+
+def save_edited(request):
+    title = request.POST.get('title')
+    body = request.POST.get('page_body')
+    util.save_entry(title, body)
+    return HttpResponseRedirect(reverse('wiki_page', args=[title]))
