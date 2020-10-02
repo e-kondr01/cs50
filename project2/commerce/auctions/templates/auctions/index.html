@@ -3,5 +3,26 @@
 {% block body %}
     <h2>Active Listings</h2>
 
-    TODO
+    <ul>
+        {% for listing in object_list %}
+            <li>
+                <h4>{{ listing.title }}</h4>
+                Description: <br>
+                {{ listing.description }} <br>
+                Starting bid:
+                {{ listing.starting_bid }} $ <br>
+                {% if listing.image_url %}
+                    <a href='{{ listing.image_url }}'>image link</a> <br>
+                {% else %}
+                    No image provided <br>
+                {% endif %}
+                {% if listing.category %}
+                    Categories: <br>
+                    {{ listing.category }} <br>
+                {% else %}
+                    No categories provided <br>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock %}
