@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
+from django.urls import reverse
 
 
 class User(AbstractUser):
@@ -13,9 +14,19 @@ class Listing(models.Model):
     starting_bid = models.DecimalField(decimal_places=2, max_digits=15)
     image_url = models.URLField(blank=True)
     category = models.CharField(max_length=64, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE,
+                                   related_name='listings')
+    current_price = models.DecimalField(decimal_places=2, max_digits=15,
+                                        null=True)
+    highest_bidder = models.ForeignKey(User, on_delete=models.PROTECT,
+                                       related_name='highest_bids', null=True)
 
     def __str__(self) -> str:
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('listing_detail', kwargs={'pk': self.pk})
 
 
 class ListingComment(models.Model):
@@ -42,3 +53,11 @@ class Bid(models.Model):
 
     def __str__(self) -> str:
         return f'{self.bidder} {self.value}'
+
+
+class WatchList(models.Model):
+    owner = models.OneToOneField(User, on_delete=models.CASCADE)
+    items = models.ManyToManyField(Listing)
+
+    def __str__(self) -> str:
+        return f"{self.owner}'s watchlists"

@@ -7,7 +7,7 @@ For more information on this file, see
 https://docs.djangoproject.com/en/3.0/topics/settings/
 
 For the full list of settings and their values, see
-https://docs.djangoproject.com/en/3.0/ref/settings/
+https://docs.djangoproject.com/en/3.0/ref/settings
 """
 
 import os
@@ -82,6 +82,9 @@ DATABASES = {
 }
 
 AUTH_USER_MODEL = 'auctions.User'
+
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators

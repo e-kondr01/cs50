@@ -1,0 +1,35 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>{{ object.title }}</h2>
+    <p>{{ object.description }}</p>
+    <p>Starting bid: {{ object.starting_bid }}$</p>
+    {% if object.current_price %}
+        <h4>Current price: {{ object.current_price }}</h4>
+    {% else %}
+        <h4>No bids yet. Be the first one to make it!</h4>
+    {% endif %}
+    {% if object.highest_bidder %}
+        <h3>Highest bidder: {{ object.highest_bidder }}</h3>
+    {% endif %}
+    {% if object.image_url %}
+        <img src='{{ object.image_url }}'>
+    {% else %}
+        <p>No image provided</p>
+    {% endif %}
+    {% if object.category %}
+        <p>Categories:</p>
+        <p>{{ listing.category }}</p>
+    {% else %}
+        <p>No categories provided</p>
+    {% endif %}
+    <p>Created by: {{ object.created_by }}</p>
+    <p>Created at: {{ object.created_at }}</p>
+    {% if user.is_authenticated %}
+        {% if object in user.watchlist.items.all %}
+            <p>You have this item in your watch list.</p>
+        {% else %}
+            <a href="{% url 'add_to_watchlist' object.pk %}">Add to my watchlist</p>
+        {% endif %}
+    {% endif %}
+{% endblock %}
