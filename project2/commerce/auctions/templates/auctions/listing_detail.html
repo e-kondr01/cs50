@@ -1,6 +1,10 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
+    {% if message%}
+        {{ message }}
+    {% endif %}
+
     <h2>{{ object.title }}</h2>
     <p>{{ object.description }}</p>
     <p>Starting bid: {{ object.starting_bid }}$</p>
@@ -12,6 +16,14 @@
     {% if object.highest_bidder %}
         <h3>Highest bidder: {{ object.highest_bidder }}</h3>
     {% endif %}
+
+    {% if user.is_authenticated %}
+        <form action="{% url 'new_bid' object.pk %}" method='post'>{% csrf_token %}
+            <p><label for="new_bid">My bid:</label>
+            <input id="new_bid" type="text" name="bid_value">$<input type="submit" value="Bid"></p>
+        </form>
+    {% endif %}
+
     {% if object.image_url %}
         <img src='{{ object.image_url }}'>
     {% else %}
@@ -27,7 +39,7 @@
     <p>Created at: {{ object.created_at }}</p>
     {% if user.is_authenticated %}
         {% if object in user.watchlist.items.all %}
-            <p>You have this item in your watch list.</p>
+            <a href="{% url 'remove_from_watchlist' object.pk %}">Remove from my watchlist</p>
         {% else %}
             <a href="{% url 'add_to_watchlist' object.pk %}">Add to my watchlist</p>
         {% endif %}

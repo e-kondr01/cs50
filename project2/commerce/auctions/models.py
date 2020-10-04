@@ -17,10 +17,13 @@ class Listing(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE,
                                    related_name='listings')
-    current_price = models.DecimalField(decimal_places=2, max_digits=15,
-                                        null=True)
+
+    '''
+    current_price = models.ForeignKey(Bid, on_delete=models.PROTECT,
+                                      related_name='listing')
     highest_bidder = models.ForeignKey(User, on_delete=models.PROTECT,
                                        related_name='highest_bids', null=True)
+    '''
 
     def __str__(self) -> str:
         return self.title

@@ -37,26 +37,6 @@ class ListingDetail(DetailView):
     model = Listing
 
 
-def login_view(request):
-    if request.method == "POST":
-
-        # Attempt to sign user in
-        username = request.POST["username"]
-        password = request.POST["password"]
-        user = authenticate(request, username=username, password=password)
-
-        # Check if authentication successful
-        if user is not None:
-            login(request, user)
-            return HttpResponseRedirect(reverse("index"))
-        else:
-            return render(request, "auctions/login.html", {
-                "message": "Invalid username and/or password."
-            })
-    else:
-        return render(request, "auctions/login.html")
-
-
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
@@ -95,3 +75,20 @@ def add_to_watchlist(request, pk):
     watchlist = request.user.watchlist
     watchlist.items.add(Listing.objects.get(pk=pk))
     return HttpResponseRedirect(reverse('listing_detail', kwargs={'pk': pk}))
+
+
+def remove_from_watchlist(request, pk):
+    watchlist = request.user.watchlist
+    watchlist.items.remove(Listing.objects.get(pk=pk))
+    return HttpResponseRedirect(reverse('listing_detail', kwargs={'pk': pk}))
+
+
+def new_bid(request, pk):
+    if request.method == 'POST':
+        bid = Bid.objects.create(bidder=request.user,
+                                 listing=Listing.objects.get(pk=pk),
+                                 value=request.POST['bid_value'])
+        bid.save()
+        return HttpResponseRedirect(reverse('listing_detail', kwargs={'pk': pk}))
+    else:
+        return HttpResponseRedirect(reverse('listing_detail', kwargs={'pk': pk}))
