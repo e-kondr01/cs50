@@ -1,11 +1,21 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    {% if message%}
-        {{ message }}
+
+    {% if request.session.new_bid_error %}
+        <h4 style='color: red;'>{{ request.session.new_bid_error }}</h4>
+    {% endif %}
+    
+    {% if object.active %}
+        {% if is_author %}
+            <a href="{% url 'close_listing' object.pk %}">Close this listing</a>
+        {% endif %}
+    {% else %}
+        <h3>This listing has been closed by its author.</h3>
     {% endif %}
 
     <h2>{{ object.title }}</h2>
+
     <p>{{ object.description }}</p>
     <p>Starting bid: {{ object.starting_bid }}$</p>
     {% if object.current_price %}
@@ -17,11 +27,15 @@
         <h3>Highest bidder: {{ object.highest_bidder }}</h3>
     {% endif %}
 
-    {% if user.is_authenticated %}
-        <form action="{% url 'new_bid' object.pk %}" method='post'>{% csrf_token %}
-            <p><label for="new_bid">My bid:</label>
-            <input id="new_bid" type="text" name="bid_value">$<input type="submit" value="Bid"></p>
-        </form>
+    {% if object.active %}
+        {% if user.is_authenticated %}
+            <form action="{% url 'new_bid' object.pk %}" method='post'>{% csrf_token %}
+                <p><label for="new_bid">My bid:</label>
+                <input id="new_bid" type="text" name="bid_value">$<input type="submit" value="Bid"></p>
+            </form>
+        {% else %}
+            <p>To bid on this listing, sign in.</p>
+        {% endif %}
     {% endif %}
 
     {% if object.image_url %}
@@ -39,9 +53,9 @@
     <p>Created at: {{ object.created_at }}</p>
     {% if user.is_authenticated %}
         {% if object in user.watchlist.items.all %}
-            <a href="{% url 'remove_from_watchlist' object.pk %}">Remove from my watchlist</p>
+            <a href="{% url 'remove_from_watchlist' object.pk %}" style='color: red;'>Remove from my watchlist</a>
         {% else %}
-            <a href="{% url 'add_to_watchlist' object.pk %}">Add to my watchlist</p>
+            <a href="{% url 'add_to_watchlist' object.pk %}" style='color: green;'>Add to my watchlist</a>
         {% endif %}
     {% endif %}
 {% endblock %}

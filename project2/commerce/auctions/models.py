@@ -17,19 +17,29 @@ class Listing(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE,
                                    related_name='listings')
-
-    '''
-    current_price = models.ForeignKey(Bid, on_delete=models.PROTECT,
-                                      related_name='listing')
-    highest_bidder = models.ForeignKey(User, on_delete=models.PROTECT,
-                                       related_name='highest_bids', null=True)
-    '''
+    active = models.BooleanField(default=True)
+    winner = models.ForeignKey(User, on_delete=models.PROTECT,
+                               related_name='winner', null=True)
 
     def __str__(self) -> str:
         return self.title
 
     def get_absolute_url(self):
         return reverse('listing_detail', kwargs={'pk': self.pk})
+
+    def highest_bidder(self):
+        highest_bid = Bid.objects.filter(listing=self).order_by('-value')
+        if highest_bid:
+            return highest_bid[0].bidder
+        else:
+            return None
+
+    def current_price(self):
+        highest_bid = Bid.objects.filter(listing=self).order_by('-value')
+        if highest_bid:
+            return highest_bid[0].value
+        else:
+            return None
 
 
 class ListingComment(models.Model):

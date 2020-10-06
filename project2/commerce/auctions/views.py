@@ -1,10 +1,11 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import ListView, CreateView, DetailView
+from django.contrib.auth.decorators import login_required
 
 from .models import *
 
@@ -12,6 +13,10 @@ from .models import *
 class ListingList(ListView):
     model = Listing
     template_name = "auctions/index.html"
+
+    def get_queryset(self):
+        listings = Listing.objects.filter(active=True)
+        return listings
 
 
 class WatchListList(LoginRequiredMixin, ListView):
@@ -36,10 +41,15 @@ class CreateListing(LoginRequiredMixin, CreateView):
 class ListingDetail(DetailView):
     model = Listing
 
-
-def logout_view(request):
-    logout(request)
-    return HttpResponseRedirect(reverse("index"))
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        listing = Listing.objects.get(pk=self.kwargs['pk'])
+        if self.request.user == listing.created_by:
+            is_author = True
+        else:
+            is_author = False
+        context['is_author'] = is_author
+        return context
 
 
 def register(request):
@@ -71,24 +81,53 @@ def register(request):
         return render(request, "auctions/register.html")
 
 
+@login_required
 def add_to_watchlist(request, pk):
     watchlist = request.user.watchlist
     watchlist.items.add(Listing.objects.get(pk=pk))
     return HttpResponseRedirect(reverse('listing_detail', kwargs={'pk': pk}))
 
 
+@login_required
 def remove_from_watchlist(request, pk):
     watchlist = request.user.watchlist
     watchlist.items.remove(Listing.objects.get(pk=pk))
     return HttpResponseRedirect(reverse('listing_detail', kwargs={'pk': pk}))
 
 
+@login_required
 def new_bid(request, pk):
     if request.method == 'POST':
-        bid = Bid.objects.create(bidder=request.user,
-                                 listing=Listing.objects.get(pk=pk),
-                                 value=request.POST['bid_value'])
-        bid.save()
+        listing = Listing.objects.get(pk=pk)
+        error = ''
+        try:
+            value = float(request.POST['bid_value'])
+
+            if value <= listing.starting_bid:
+                error = 'Your bid should be higher than the starting value!'
+
+            if listing.current_price():
+                if value <= listing.current_price():
+                    error = 'Your bid should be higher than other bids for this listing!'
+        except ValueError:
+            error = 'You have to type in a valid number'
+
+        if error:
+            request.session['new_bid_error'] = error
+        else:
+            bid = Bid.objects.create(bidder=request.user,
+                                     listing=listing,
+                                     value=value)
+            bid.save()
         return HttpResponseRedirect(reverse('listing_detail', kwargs={'pk': pk}))
     else:
         return HttpResponseRedirect(reverse('listing_detail', kwargs={'pk': pk}))
+
+
+@login_required
+def close_listing(request, pk):
+    listing = Listing.objects.get(pk=pk)
+    listing.active = False
+    listing.winner = listing.highest_bidder()
+    listing.save()
+    return HttpResponseRedirect(reverse('listing_detail', kwargs={'pk': pk}))
