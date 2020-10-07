@@ -15,4 +15,7 @@ urlpatterns = [
     path('watchlist', views.WatchListList.as_view(), name='watchlist'),
     path('new_bid/<int:pk>', views.new_bid, name='new_bid'),
     path('close_listing/<int:pk>', views.close_listing, name='close_listing'),
+    path('make_comment/<int:pk>', views.make_comment, name='make_comment'),
+    path('categories', views.CategoryList.as_view(), name='categories'),
+    path('categories/<int:pk>', views.ViewCategory.as_view(), name='view_category'),
 ]

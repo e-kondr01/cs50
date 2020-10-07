@@ -8,15 +8,19 @@
     
     {% if object.active %}
         {% if is_author %}
-            <a href="{% url 'close_listing' object.pk %}">Close this listing</a>
+            <p>This is your listing. You can <a href="{% url 'close_listing' object.pk %}">close this listing</a></p>
         {% endif %}
     {% else %}
-        <h3>This listing has been closed by its author.</h3>
+        {% if is_winner %}
+            <h3>You have won this listing!</h3>
+        {% else %}
+            <h3>This listing has been closed by its author.</h3>
+        {% endif %}
     {% endif %}
 
     <h2>{{ object.title }}</h2>
 
-    <p>{{ object.description }}</p>
+    <p>Description: {{ object.description }}</p>
     <p>Starting bid: {{ object.starting_bid }}$</p>
     {% if object.current_price %}
         <h4>Current price: {{ object.current_price }}</h4>
@@ -51,6 +55,24 @@
     {% endif %}
     <p>Created by: {{ object.created_by }}</p>
     <p>Created at: {{ object.created_at }}</p>
+
+    {% if user.is_authenticated %}
+        <form action="{% url 'make_comment' object.pk %}" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Submit">
+        </form>
+    {% endif %}
+
+    {% for comment in comments %}
+        <div><hr>
+            <p>Comment by {{comment.author}}</p>
+            <p>{{ comment.text }}</p>
+            <p>Rating: {{ comment.rating }}</p>
+            <p>Posted at: {{ comment.posted }}</p>
+        </div>
+    {% endfor %}
+
     {% if user.is_authenticated %}
         {% if object in user.watchlist.items.all %}
             <a href="{% url 'remove_from_watchlist' object.pk %}" style='color: red;'>Remove from my watchlist</a>

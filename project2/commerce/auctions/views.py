@@ -8,6 +8,7 @@ from django.views.generic import ListView, CreateView, DetailView
 from django.contrib.auth.decorators import login_required
 
 from .models import *
+from .forms import *
 
 
 class ListingList(ListView):
@@ -17,6 +18,11 @@ class ListingList(ListView):
     def get_queryset(self):
         listings = Listing.objects.filter(active=True)
         return listings
+
+
+class CategoryList(ListView):
+    model = ListingCategory
+    template_name = "auctions/categories.html"
 
 
 class WatchListList(LoginRequiredMixin, ListView):
@@ -44,11 +50,23 @@ class ListingDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         listing = Listing.objects.get(pk=self.kwargs['pk'])
+
         if self.request.user == listing.created_by:
             is_author = True
         else:
             is_author = False
+
+        if self.request.user == listing.winner:
+            is_winner = True
+        else:
+            is_winner = False
+        
+        comments = ListingComment.objects.filter(original_listing=listing).all()
+
+        context['is_winner'] = is_winner
         context['is_author'] = is_author
+        context['form'] = ListingCommentForm()
+        context['comments'] = comments
         return context
 
 
@@ -131,3 +149,33 @@ def close_listing(request, pk):
     listing.winner = listing.highest_bidder()
     listing.save()
     return HttpResponseRedirect(reverse('listing_detail', kwargs={'pk': pk}))
+
+
+@login_required
+def make_comment(request, pk):
+    listing = Listing.objects.get(pk=pk)
+    form = ListingCommentForm(request.POST)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.original_listing = listing
+        comment.author = request.user
+        comment.save()
+        return HttpResponseRedirect(reverse('listing_detail', kwargs={'pk': pk}))
+
+
+class ViewCategory(ListView):
+    model = Listing
+    template_name = "auctions/view_category.html"
+
+    def get_queryset(self):
+        pk = self.kwargs['pk']
+        category = ListingCategory.objects.get(pk=pk)
+        listings = Listing.objects.filter(active=True).filter(category=category)
+        return listings
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs['pk']
+        category = ListingCategory.objects.get(pk=pk)
+        context['category'] = category.name
+        return context

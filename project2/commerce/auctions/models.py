@@ -8,14 +8,24 @@ class User(AbstractUser):
     pass
 
 
+class ListingCategory(models.Model):
+    name = models.CharField(max_length=128)
+
+    def __str__(self) -> str:
+        return f"{self.name}"
+
+
 class Listing(models.Model):
     title = models.CharField(max_length=128)
     description = models.TextField()
     starting_bid = models.DecimalField(decimal_places=2, max_digits=15)
     image_url = models.URLField(blank=True)
-    category = models.CharField(max_length=64, blank=True)
+
+    category = models.ForeignKey(ListingCategory, on_delete=models.PROTECT,
+                                 related_name='listings', null=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE,
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT,
                                    related_name='listings')
     active = models.BooleanField(default=True)
     winner = models.ForeignKey(User, on_delete=models.PROTECT,
@@ -43,10 +53,10 @@ class Listing(models.Model):
 
 
 class ListingComment(models.Model):
-    original_listing = models.ForeignKey(Listing, on_delete=models.CASCADE,
+    original_listing = models.ForeignKey(Listing, on_delete=models.PROTECT,
                                          related_name='comments')
     text = models.TextField()
-    author = models.ForeignKey(User, on_delete=models.CASCADE,
+    author = models.ForeignKey(User, on_delete=models.PROTECT,
                                related_name='comments')
     rating = models.IntegerField(default=1)
     posted = models.DateTimeField(auto_now_add=True)
@@ -57,9 +67,9 @@ class ListingComment(models.Model):
 
 
 class Bid(models.Model):
-    bidder = models.ForeignKey(User, on_delete=models.CASCADE,
+    bidder = models.ForeignKey(User, on_delete=models.PROTECT,
                                related_name='bids')
-    listing = models.ForeignKey(Listing, on_delete=models.CASCADE,
+    listing = models.ForeignKey(Listing, on_delete=models.PROTECT,
                                 related_name='bids')
     value = models.DecimalField(decimal_places=2, max_digits=15)
     created = models.DateTimeField(auto_now_add=True)
